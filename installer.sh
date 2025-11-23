@@ -112,7 +112,7 @@ echo "INFO >>> Detecting Linux distribution operating system compatibility"
 dist_val="unknown"
 cat /etc/*release | grep -i debian | grep -i debian > /dev/null && dist_val="debian"
 cat /etc/*release | grep -i ubuntu | grep -i ubuntu > /dev/null && dist_val="ubuntu"
-    
+
 cat /etc/*release | grep -i -e debian -e ubuntu > /dev/null;
 if [[ ${?} != 0 ]]; then
    cat /etc/*release
@@ -127,7 +127,7 @@ echo "INFO >>> Detecting Linux distribution 'sudo'/'su' compatibility"
 sudo -v; (test $? != 0) && su_cmd="echo 'Please enter ROOT password'; su -c" || su_cmd="echo 'Please enter ${USER} sudo password'; sudo sh -c";
 
 echo ""
-echo "DEXSETUP INSTALLER - Blocknet's Decentralized Exchange Backend System Installer for Debian/Ubuntu based Linux distributions, namely dexsetup framework"
+echo "DEX INSTALLER - Complete Blocknet's Decentralized Exchange Base Backend System Installer for Debian/Ubuntu based Linux distributions (dexinstaller, dexsetup, dexbot, BlockDX, Blocknet etc..)"
 echo "We build decentralized system which has NO central point of failure or control"
 echo "What it is and does:"
 echo "It is advanced multipurpose tool to build genuine decentralized systems"
@@ -186,10 +186,31 @@ else
    pkg_gui_build=""
 fi
 
-tool_interactivity "pkg-gui-tools-y" "pkg-gui-tools-n" "Would you like to set to install optional graphical user interface packages and support for Tiger VNC server?"
+tool_interactivity "pkg-mate-desktop-y" "pkg-mate-desktop-n" "Would you like to set to install Mate Desktop Environment(could be configured with VNC remote desktop)?"
 if [[ "${var_q}" == "y" ]]; then
-   pkg_gui_tools="gitg keepassx geany xsensors tigervnc-standalone-server"
-   tool_interactivity "vnc-autostart-y" "vnc-autostart-n" "Would you like to set to setup tigervnc server to start automatically after startup?"
+   pkg_mate_desktop="mate-desktop mate-desktop-environment-core mate-tweak mate-utils mate-utils-common mate-themes mate-applets mate-calc mate-notification-daemon mate-screensaver mate-sensors-applet"
+else
+   pkg_mate_desktop=""
+fi
+
+tool_interactivity "pkg-gui-tools-y" "pkg-gui-tools-n" "Would you like to set to install useful graphical user interface packages tools(gitg, keepassx, geany, xsensors, synaptic..)?"
+
+if [[ "${var_q}" == "y" ]]; then
+   pkg_gui_tools="gitg keepassxc geany xsensors synaptic"
+else
+   pkg_gui_tools=""
+fi
+
+tool_interactivity "pkg-vnc-tools-y" "pkg-vnc-tools-n" "Would you like to set to install Tiger VNC server(remote desktop support)?"
+if [[ "${var_q}" == "y" ]]; then
+   pkg_vnc="tigervnc-standalone-server"
+else
+   pkg_vnc=""
+fi
+
+# if tiger VNC is going to be installed could be configure to autostart
+if [[ "${pkg_vnc}" != "" ]]; then
+   tool_interactivity "vnc-autostart-y" "vnc-autostart-n" "Would you like to set to setup Tiger VNC server to start automatically '${USER}' session after startup?"
    if [[ "${var_q}" == "y" ]]; then
       #~ grep "^:1=${USER}$" /etc/tigervnc/vncserver.users >> /dev/null && cfg_user_vnc="echo 'TigerVNC for ${USER} is already configured'" || cfg_user_vnc="echo ':1=${USER}' >> /etc/tigervnc/vncserver.users; systemctl start tigervncserver@:1.service; systemctl enable tigervncserver@:1.service";
       port=1
@@ -212,10 +233,6 @@ if [[ "${var_q}" == "y" ]]; then
          fi
       done
    fi
-   tigervnc_yes="y"
-else
-   pkg_gui_tools=""
-   tigervnc_yes=""
 fi
 
 [[ "${cfg_user_tor}" == "" ]] && cfg_user_tor="echo 'no Tor service for ${USER} is going to be configured'"
@@ -223,7 +240,7 @@ fi
 
 while : ; do
    # make system update and setup command
-   eval_cmdd="${su_cmd} \"${pkg_update}; apt -y install apt ${pkg_privacy} ${pkg_cli_build} ${pkg_cli_tools} ${pkg_gui_build} ${pkg_gui_tools}; ${cfg_user_tor}; ${cfg_user_vnc}; exit\""
+   eval_cmdd="${su_cmd} \"${pkg_update}; apt -y install apt ${pkg_privacy} ${pkg_cli_build} ${pkg_cli_tools} ${pkg_gui_build} ${pkg_mate_desktop} ${pkg_gui_tools} ${pkg_vnc}; ${cfg_user_tor}; ${cfg_user_vnc}; exit\""
    # log message system update and setup command
    echo ""
    echo "${eval_cmdd}"
@@ -258,7 +275,9 @@ while : ; do
    fi
 done
 
-if [[ "${tigervnc_yes}" == "y" ]]; then
+# if Tiger VNC,
+# then we could set VNC password
+if [[ "${pkg_vnc}" != "" ]]; then
    tool_interactivity "vnc-setpassword-y" "vnc-setpassword-n" "Would you like to setup VNC user login password?"
    if [[ "${var_q}" == "y" ]]; then
       tool_arg_value "vncpasswd" "" "" "secret" ""
@@ -270,6 +289,31 @@ if [[ "${tigervnc_yes}" == "y" ]]; then
          tigervncpasswd
       fi
       (test $? != 0) && echo "ERROR >>> setup vnc password failed" && exit 1
+   fi
+fi
+
+# if Tiger VNC and Mate Desktop is going to be installed and VNC configured to autostart,
+# then we can configure vncsession with Mate desktop session
+if [[ "${pkg_vnc}" != "" ]] && [[ "${pkg_mate_desktop}" != "" ]]; then
+   tool_interactivity "vnc-mate-desktop-y" "vnc-mate-desktop-n" "Would you like to set Tiger VNC '${USER}' session to use Mate Desktop?"
+   if [[ "${var_q}" == "y" ]]; then
+      mv ~/.vnc/xstartup ~/.vnc/xstartup_`date +'%Y_%m_%d_%H%M%S'`
+      echo "#!/bin/sh
+
+xrdb \"$HOME/.Xresources\"
+#xsetroot -solid grey
+
+#x-terminal-emulator -geometry 80x24+10+10 -ls -title \"$VNCDESKTOP Desktop\" &
+#x-window-manager &
+# Fix to make GNOME work
+
+#export XKL_XMODMAP_DISABLE=1
+#/etc/X11/Xsession
+
+unset SESSION_MANAGER
+# unset DBUS_SESSION_BUS_ADDRESS
+exec mate-session" > ~/.vnc/xstartup && chmod +x ~/.vnc/xstartup
+      (test $? != 0) && echo "ERROR >>> make vnc xstartup file failed" && exit 1
    fi
 fi
 
