@@ -3,7 +3,7 @@
   * One stop point installer/tutorial, which guides everything needed to know to setup/configure/run/manage backend of most decentralized exchange DEX by [Blocknet](https://blocknet.org/built-on-blocknet.html)
 
 ### Summary
-  1. [Running CLI installer](#1-running-cli-installer)
+  1. [Running DEX Installer](#1-running-dex-installer)
   2. [Remote desktop management with VNC](#2-remote-desktop-management-with-vnc)
   3. [Directory structure](#3-directory-structure)
   4. [Start, Attach, Navigate and Detach from installed dexsetup environment by terminal](#4-start-attach-navigate-and-detach-from-installed-dexsetup-environment-by-terminal)
@@ -20,7 +20,7 @@
   9. [Donations](#9-donations)
   10. [Remember](#10-remember)
 
-### 1. Running CLI installer
+### 1. Running DEX Installer
   * **update system and install privacy packages** (one time needed)
   * Update system and install `tor`, `proxychains4` and `wget` privacy packages on **`Debian`** or **`Ubuntu`** based distributions by using `apt` and `su` or `sudo`:
 ```
@@ -38,8 +38,8 @@ mkdir -p ~/dexsetup && cd ~/dexsetup && rm -f installer.sh && proxychains4 wget 
 ```
 cd ~/dexsetup && bash installer.sh
 ```
-  * Alternative installer run in automatization mode with custom parameters
-  * Examples of automatization and custom installer usage by arguments could be found in here [Additional resources](#7-additional-resources)
+  * **run installer in automatic deployment mode**:
+  * Alternative examples to run DEX installer in automatic(non-interactive) mode with custom arguments could be found here: [Additional resources](#7-additional-resources)
 
 ### 2. Remote desktop management with VNC
   * Open secured SSH tunnel between client and server(replace `10.10.10.10X` with real IP address)
