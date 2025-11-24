@@ -12,13 +12,16 @@ pkgs="proxychains4 tor torsocks wget";
 groups | grep debian-tor > /dev/null && cfg_user_tor="echo 'Tor for ${USER} is already configured'" || cfg_user_tor="usermod -a -G debian-tor ${USER}";
 
 # detect if to use sudo or su
-sudo -v; (test $? != 0) && su_cmd="echo 'Please enter ROOT password'; su -c" || su_cmd="echo 'Please enter ${USER} sudo password'; sudo sh -c";
+sudo -v; (test $? != 0) && su_cmd="echo 'Please enter ROOT password'; su - -c" || su_cmd="echo 'Please enter ${USER} sudo password'; sudo sh -c";
 
 # do necessary system update and install all needed packages
 eval "${su_cmd} \"apt -y update; apt -y full-upgrade; apt -y install ${pkgs}; ${cfg_user_tor}; exit\""
 
-# make base dexsetup directory, download dexsetup.installer by tor network and run installer with pre-configured arguments to use dexsetup.framework just to download/update session and make profile named default.
-mkdir -p ~/dexsetup && cd ~/dexsetup && rm -f installer.sh && proxychains4 wget "https://github.com/nnmfnwl/dexsetup.cli.installer/raw/refs/heads/main/installer.sh" && bash installer.sh DEFAULT-N c-y dexsetup-update-y session-y session-profile-y session-update-y
+#download installer and verify file checksum
+mkdir -p ~/dexsetup && cd ~/dexsetup && rm -f installer.sh && proxychains4 wget "https://github.com/nnmfnwl/dexinstaller/raw/refs/heads/dev.2025.10.23/installer.sh" && sha512sum installer.sh | grep 63a6802ec2ae7f24913d1f0ff785d39a6192b795fbc490c32fd7c57726bba6d0a84ff807c056fcfa1116ce9a5756a44baf15a71b8789bf63b3efd7fb8d57e016 && (echo "installer fingerprint verification success") || (sha512sum installer.sh; echo "installer fingerprint verification failed"; rm -f installer.sh)
+
+# run installer with pre-configured arguments to use dexsetup.framework just to download/update session and make profile named default.
+cd ~/dexsetup && bash installer.sh DEFAULT-N c-y dexsetup-update-y session-y session-profile-y session-update-y
 ```
 
 #### Setting up multiple profiles
@@ -68,4 +71,4 @@ session
 ```
 
 #### Thanks for reading, feedback is welcome.
-  * [Contact me](https://github.com/nnmfnwl/dexsetup.cli.installer#8-contact-me)
+  * [Contact me](https://github.com/nnmfnwl/dexinstaller#8-contact-me)
