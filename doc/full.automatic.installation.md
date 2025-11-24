@@ -48,4 +48,4 @@ cd ~/dexsetup && bash installer.sh DEFAULT-Y
 ```
 
 #### Thanks for reading, feedback is welcome.
-  * [Contact me](https://github.com/nnmfnwl/dexsetup.cli.installer#8-contact-me)
+  * [Contact me](https://github.com/nnmfnwl/dexinstaller#8-contact-me)
