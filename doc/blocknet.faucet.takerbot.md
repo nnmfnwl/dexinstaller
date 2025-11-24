@@ -27,13 +27,16 @@ pkgs="proxychains4 tor torsocks wget";
 groups | grep debian-tor > /dev/null && cfg_user_tor="echo 'Tor for ${USER} is already configured'" || cfg_user_tor="usermod -a -G debian-tor ${USER}";
 
 # detect if to use sudo or su
-sudo -v; (test $? != 0) && su_cmd="echo 'Please enter ROOT password'; su -c" || su_cmd="echo 'Please enter ${USER} sudo password'; sudo sh -c";
+sudo -v; (test $? != 0) && su_cmd="echo 'Please enter ROOT password'; su - -c" || su_cmd="echo 'Please enter ${USER} sudo password'; sudo sh -c";
 
 # do necessary system update and install all needed packages
 eval "${su_cmd} \"apt -y update; apt -y full-upgrade; apt -y install ${pkgs}; ${cfg_user_tor}; exit\""
 
-# make base dexsetup directory, download dexsetup.installer by tor network and run installer with pre-configured arguments to use dexsetup.framework just to setup Blocknet dexbot faucet.
-mkdir -p ~/dexsetup && cd ~/dexsetup && rm -f installer.sh && proxychains4 wget "https://github.com/nnmfnwl/dexsetup.cli.installer/raw/refs/heads/main/installer.sh" && bash installer.sh DEFAULT-N c-y upgrade-y pkg-privacy-y pkg-build-y pkg-tools-y pkg-gui-build-y pkg-gui-tools-y proceed-y vnc-autostart-y vnc-passwd "vncpasswordhere" BLOCK-install-y LTC-install-y PIVX-install-y dex-profiles-y BLOCK-dex-profile-y LTC-dex-profile-y PIVX-dex-profile-y dexbot-strategies-y BLOCK-LTC-setup-y BLOCK-LTC-strategy-cfg "./src/cfg.strategy.block.ltc.faucet_takerbot.sh" BLOCK-LTC-strategy-name 'faucet1' BLOCK-LTC-strategy-addr-a 'blocknet01' BLOCK-LTC-strategy-addr-b 'litecoin01' strategy-cfg-a './src/cfg.cc.pivx.sh' strategy-cfg-b './src/cfg.cc.blocknet.sh' strategy-cfg "./src/cfg.strategy.pivx.block.faucet_takerbot.sh" strategy-name 'faucet1' strategy-addr-a 'pivx01' strategy-addr-b 'blocknet02' 
+#download installer and verify file checksum
+mkdir -p ~/dexsetup && cd ~/dexsetup && rm -f installer.sh && proxychains4 wget "https://github.com/nnmfnwl/dexinstaller/raw/refs/heads/dev.2025.10.23/installer.sh" && sha512sum installer.sh | grep 63a6802ec2ae7f24913d1f0ff785d39a6192b795fbc490c32fd7c57726bba6d0a84ff807c056fcfa1116ce9a5756a44baf15a71b8789bf63b3efd7fb8d57e016 && (echo "installer fingerprint verification success") || (sha512sum installer.sh; echo "installer fingerprint verification failed"; rm -f installer.sh)
+
+# run installer with pre-configured arguments to use dexsetup.framework just to setup Blocknet dexbot faucet.
+cd ~/dexsetup && bash installer.sh DEFAULT-N c-y upgrade-y pkg-privacy-y pkg-build-y pkg-tools-y pkg-gui-build-y pkg-gui-tools-y proceed-y vnc-autostart-y vnc-passwd "vncpasswordhere" BLOCK-install-y LTC-install-y PIVX-install-y dex-profiles-y BLOCK-dex-profile-y LTC-dex-profile-y PIVX-dex-profile-y dexbot-strategies-y BLOCK-LTC-setup-y BLOCK-LTC-strategy-cfg "./src/cfg.strategy.block.ltc.faucet_takerbot.sh" BLOCK-LTC-strategy-name 'faucet1' BLOCK-LTC-strategy-addr-a 'blocknet01' BLOCK-LTC-strategy-addr-b 'litecoin01' strategy-cfg-a './src/cfg.cc.pivx.sh' strategy-cfg-b './src/cfg.cc.blocknet.sh' strategy-cfg "./src/cfg.strategy.pivx.block.faucet_takerbot.sh" strategy-name 'faucet1' strategy-addr-a 'pivx01' strategy-addr-b 'blocknet02' 
 ```
 
 #### 2. Setup into existing dexsetup environment, no update of existing component
@@ -67,14 +70,17 @@ pkgs="proxychains4 tor torsocks wget";
 groups | grep debian-tor > /dev/null && cfg_user_tor="echo 'Tor for ${USER} is already configured'" || cfg_user_tor="usermod -a -G debian-tor ${USER}";
 
 # detect if to use sudo or su
-sudo -v; (test $? != 0) && su_cmd="echo 'Please enter ROOT password'; su -c" || su_cmd="echo 'Please enter ${USER} sudo password'; sudo sh -c";
+sudo -v; (test $? != 0) && su_cmd="echo 'Please enter ROOT password'; su - -c" || su_cmd="echo 'Please enter ${USER} sudo password'; sudo sh -c";
 
 # do necessary system update and install all needed packages
 eval "${su_cmd} \"apt -y update; apt -y full-upgrade; apt -y install ${pkgs}; ${cfg_user_tor}; exit\""
 
-# make base dexsetup directory, download dexsetup.installer by tor network and run installer with pre-configured arguments to use dexsetup.framework just to setup Blocknet dexbot faucet.
+#download installer and verify file checksum
+mkdir -p ~/dexsetup && cd ~/dexsetup && rm -f installer.sh && proxychains4 wget "https://github.com/nnmfnwl/dexinstaller/raw/refs/heads/dev.2025.10.23/installer.sh" && sha512sum installer.sh | grep 63a6802ec2ae7f24913d1f0ff785d39a6192b795fbc490c32fd7c57726bba6d0a84ff807c056fcfa1116ce9a5756a44baf15a71b8789bf63b3efd7fb8d57e016 && (echo "installer fingerprint verification success") || (sha512sum installer.sh; echo "installer fingerprint verification failed"; rm -f installer.sh)
+
+# run installer with pre-configured arguments to use dexsetup.framework just to setup Blocknet dexbot faucet.
 mkdir -p ~/dexsetup && cd ~/dexsetup && rm -f installer.sh && proxychains4 wget "https://github.com/nnmfnwl/dexsetup.cli.installer/raw/refs/heads/main/installer.sh" && bash installer.sh DEFAULT-N c-y upgrade-y pkg-privacy-y pkg-build-y pkg-tools-y pkg-gui-build-y pkg-gui-tools-y proceed-y dexsetup-update-y proxychains-usr-reconfig-y vnc-autostart-y vnc-passwd "vncpasswordhere" BLOCK-install-y BLOCK-update-y LTC-install-y LTC-update-y PIVX-install-y PIVX-update-y dex-profiles-y BLOCK-dex-profile-y LTC-dex-profile-y PIVX-dex-profile-y dexbot-strategies-y BLOCK-LTC-setup-y BLOCK-LTC-strategy-cfg "./src/cfg.strategy.block.ltc.faucet_takerbot.sh" BLOCK-LTC-strategy-name 'faucet1' BLOCK-LTC-strategy-addr-a 'blocknet01' BLOCK-LTC-strategy-addr-b 'litecoin01' BLOCK-LTC-update-y strategy-cfg-a './src/cfg.cc.pivx.sh' strategy-cfg-b './src/cfg.cc.blocknet.sh' strategy-cfg "./src/cfg.strategy.pivx.block.faucet_takerbot.sh" strategy-name 'faucet1' strategy-addr-a 'pivx01' strategy-addr-b 'blocknet02 strategy-update-y' 
 ```
 
 #### Thanks for reading, feedback is welcome.
-  * [Contact me](https://github.com/nnmfnwl/dexsetup.cli.installer#8-contact-me)
+  * [Contact me](https://github.com/nnmfnwl/dexinstaller#8-contact-me)
