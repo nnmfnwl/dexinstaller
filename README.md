@@ -190,12 +190,12 @@ cd ~/dexsetup/dexbot/git.src/ && ls -la | grep strategy | grep .py
   * 10 minutes full installation tutorial on X - [X.com](https://x.com/nnmfnwl/status/1975517690937880999) (video is cut because 10 minutes limit on X)
   
 ### 8. Contact me
-  * [nnmfnwl7 on bastyon](https://bastyon.com/nnmfnwl7) - Bastyon, fully decentralized proof-of-stake blockchain based social network,chat,video,stream,blog,tip,monetization,pay-to-view platform
-  * [dexsetup public chat on Bastyon](https://bastyon.com/welcome?publicroom=!cJLoAwwxvGxLoTtjwv:matrix.pocketnet.app) - DEXSETUP **open public chat on bastyon**
-  * [nnmfnwl on X](https://x.com/nnmfnwl) - Twitter/X
-  * `051dcabc45ab21bcb5b8c3b29416f2cdac1e8b9836f545fd4e470e0f31a9ed825a` - Session privacy messenger - [getsession.org](https://getsession.org)
-  * [nnmfnwl7 on CMC](https://coinmarketcap.com/community/profile/nnmfnwl7/) - CoinMarketCap profile
-  * sha512 sum of email for verification - `f287ec46e5f0875832abb68ff54db2a4d0fe93b35ccc0cbe692f2ee6f545603d41db4e4d230fa8d2c8ffa2f39531d1da5421bfeab542c1098a6c7e26a6fec64c` - get as `echo "***@p**l.com" | sha512sum`
+  * Bastyon - [nnmfnwl7](https://bastyon.com/nnmfnwl7) - fully decentralized proof-of-stake blockchain based social network,chat,video,stream,blog,tip,monetization,pay-to-view platform
+  * Bastyon public chat - [Blocknet DEX](https://bastyon.com/welcome?publicroom=!cJLoAwwxvGxLoTtjwv:matrix.pocketnet.app)
+  * Twitter/X - [nnmfnwl on X](https://x.com/nnmfnwl)
+  * Session privacy messenger - `051dcabc45ab21bcb5b8c3b29416f2cdac1e8b9836f545fd4e470e0f31a9ed825a` - [getsession.org](https://getsession.org)
+  * Coinmarketcap - [nnmfnwl7](https://coinmarketcap.com/community/profile/nnmfnwl7/)
+  * Email fingerprint - `f287ec46e5f0875832abb68ff54db2a4d0fe93b35ccc0cbe692f2ee6f545603d41db4e4d230fa8d2c8ffa2f39531d1da5421bfeab542c1098a6c7e26a6fec64c` - verify as `echo "<email>" | sha512sum`
 
 ### 9. Donations
   * Donations for [DEXBOT](https://github.com/nnmfnwl/dexbot/tree/merge.2025.03.26), [DEXSETUP](https://github.com/nnmfnwl/dexsetup/tree/merge.2025.02.06), [DEXINSTALLER](https://github.com/nnmfnwl/dexinstaller) and [DEXSETUP.VIDEOS](https://github.com/nnmfnwl/dexsetup.videos) continuous development, testing and liquidity providing:
@@ -211,7 +211,7 @@ cd ~/dexsetup/dexbot/git.src/ && ls -la | grep strategy | grep .py
   * PKOIN: ****
   * LBC: ****
   * XMR: ****
-  * ETH: ****
+  * ETH: 0x08337DDB696d43fbC91e3961bE900A5cb20EfAda
 
 ### 10. Remember
   * Your keys your content.
