@@ -34,7 +34,7 @@ sudo -v; (test $? != 0) && su_cmd="echo 'Please enter ROOT password'; su - -c" |
 eval "${su_cmd} \"apt -y update; apt -y full-upgrade; apt -y install ${pkgs}; ${cfg_user_tor}; exit\""
 
 #download installer and verify file checksum
-mkdir -p ~/dexsetup && cd ~/dexsetup && rm -f installer.sh && proxychains4 wget "https://github.com/nnmfnwl/dexinstaller/raw/refs/heads/dev.2025.10.23/installer.sh" && sha512sum installer.sh | grep 63a6802ec2ae7f24913d1f0ff785d39a6192b795fbc490c32fd7c57726bba6d0a84ff807c056fcfa1116ce9a5756a44baf15a71b8789bf63b3efd7fb8d57e016 && (echo "installer fingerprint verification success") || (sha512sum installer.sh; echo "installer fingerprint verification failed"; rm -f installer.sh)
+mkdir -p ~/dexsetup && cd ~/dexsetup && rm -f installer.sh && proxychains4 wget "https://github.com/nnmfnwl/dexinstaller/raw/refs/heads/dev.2025.10.23/installer.sh" && sha512sum installer.sh | grep c248dffa4d53db4d70a5026f1b147533bbe4727482e1a668ef525e5cce25981dd82811b1b63b6ba04a626630d42afb6d20f2742fc5632d892c6fc47c32f2076f && (echo "installer fingerprint verification success") || (sha512sum installer.sh; echo "installer fingerprint verification failed"; rm -f installer.sh)
 
 # run installer with pre-configured arguments to use dexsetup.framework just to setup specified wallet(BLOCK - Blocknet).
 cd ~/dexsetup && bash installer.sh DEFAULT-N c-y upgrade-y pkg-privacy-y pkg-build-y pkg-tools-y pkg-gui-build-y pkg-gui-tools-y proceed-y ${WALLET}-install-y dao-profiles-y ${WALLET}-dao-profile-y dex-profiles-y ${WALLET}-dex-profile-y stake-profiles-y ${WALLET}-stake-profile-y
@@ -72,7 +72,7 @@ sudo -v; (test $? != 0) && su_cmd="echo 'Please enter ROOT password'; su - -c" |
 eval "${su_cmd} \"apt -y update; apt -y full-upgrade; apt -y install ${pkgs}; ${cfg_user_tor}; exit\""
 
 # download installer and verify file checksum
-mkdir -p ~/dexsetup && cd ~/dexsetup && rm -f installer.sh && proxychains4 wget "https://github.com/nnmfnwl/dexinstaller/raw/refs/heads/dev.2025.10.23/installer.sh" && sha512sum installer.sh | grep 63a6802ec2ae7f24913d1f0ff785d39a6192b795fbc490c32fd7c57726bba6d0a84ff807c056fcfa1116ce9a5756a44baf15a71b8789bf63b3efd7fb8d57e016 && (echo "installer fingerprint verification success") || (sha512sum installer.sh; echo "installer fingerprint verification failed"; rm -f installer.sh)
+mkdir -p ~/dexsetup && cd ~/dexsetup && rm -f installer.sh && proxychains4 wget "https://github.com/nnmfnwl/dexinstaller/raw/refs/heads/dev.2025.10.23/installer.sh" && sha512sum installer.sh | grep c248dffa4d53db4d70a5026f1b147533bbe4727482e1a668ef525e5cce25981dd82811b1b63b6ba04a626630d42afb6d20f2742fc5632d892c6fc47c32f2076f && (echo "installer fingerprint verification success") || (sha512sum installer.sh; echo "installer fingerprint verification failed"; rm -f installer.sh)
 
 # run installer with pre-configured arguments to use dexsetup.framework just to setup specified wallet(BLOCK - Blocknet).
 cd ~/dexsetup && bash installer.sh DEFAULT-N c-y upgrade-y pkg-privacy-y pkg-build-y pkg-tools-y pkg-gui-build-y pkg-gui-tools-y proceed-y dexsetup-update-y ${WALLET}-install-y ${WALLET}-update-y dao-profiles-y ${WALLET}-dao-profile-y dex-profiles-y ${WALLET}-dex-profile-y stake-profiles-y ${WALLET}-stake-profile-y
