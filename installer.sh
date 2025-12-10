@@ -621,6 +621,24 @@ if [[ "${var_q}" == "y" ]]; then
    (test $? != 0) && echo "setup SESSION profile failed" && exit 1
 fi
 
+tool_interactivity "simplex-y" "simplex-n" "Would you like to install SIMPLEX privacy messenger app?"
+if [[ "${var_q}" == "y" ]]; then
+   ./setup.simplex.sh download install 
+   if [[ ${?} != 0 ]]; then
+      tool_interactivity "simplex-update-y" "simplex-update-n" "SIMPLEX app seems already installed, would you like to try to update it to latest version first?"
+      if [[ "${var_q}" == "y" ]]; then
+         ./setup.simplex.sh update
+         (test $? != 0) && echo "Setup SIMPLEX app failed" && exit 1
+      fi
+   fi
+fi
+
+tool_interactivity "simplex-profile-y" "simplex-profile-n" "Would you like to auto-configure SIMPLEX default profile?"
+if [[ "${var_q}" == "y" ]]; then
+   ./setup.simplex.profile.sh default
+   (test $? != 0) && echo "setup SIMPLEX profile failed" && exit 1
+fi
+
 tool_interactivity "tor-browser-y" "tor-browser-n" "Would you like to install tor-browser ultimate privacy web browser?"
 if [[ "${var_q}" == "y" ]]; then
    ./setup.torbrowser.sh download install 
