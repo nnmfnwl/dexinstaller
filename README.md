@@ -195,6 +195,7 @@ cd ~/dexsetup/dexbot/git.src/ && ls -la | grep strategy | grep .py
   * Twitter/X - [nnmfnwl on X](https://x.com/nnmfnwl) (X chat is not reliable and actually not working)
   * Session privacy messenger - `051dcabc45ab21bcb5b8c3b29416f2cdac1e8b9836f545fd4e470e0f31a9ed825a` - [getsession.org](https://getsession.org)
   * Simplex privacy messenger - `https://smp17.simplex.im/a#zpuOvtOEGHLoCnkTRwuefisdHvLD9dqlcU5-rjj1KFI` - [simplex.chat](https://simplex.chat/)
+  * Simplex public group chat - `https://smp17.simplex.im/g#NbHADPZBLIMlFru_hyqEhwbw4zBbYVq84jtXpLCqA68` - [simplex.chat](https://simplex.chat/)
   * Coinmarketcap - [nnmfnwl7](https://coinmarketcap.com/community/profile/nnmfnwl7/)
   * Email fingerprint - `f287ec46e5f0875832abb68ff54db2a4d0fe93b35ccc0cbe692f2ee6f545603d41db4e4d230fa8d2c8ffa2f39531d1da5421bfeab542c1098a6c7e26a6fec64c` - verify as `echo "<email>" | sha512sum`
 
