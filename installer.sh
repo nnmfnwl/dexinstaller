@@ -8,6 +8,11 @@ id | grep root && echo "ERROR >>> IT IS NOT ALLOWED TO RUN THIS SCRIPT AS ROOT !
 argcc=$#
 argvv=("$@")
 
+# define
+#~ dexsetup_git_branch="merge.2025.02.06"
+#~ dexsetup_git_branch="dev.2025.10.23"
+dexsetup_git_branch="main"
+
 # interactivity function definition. find yes or no arguments or ask interactively
 function tool_interactivity() { #toyes #tono #info
    for (( j=0; j<argcc; j++ )); do
@@ -105,6 +110,10 @@ function tool_arg_value() { #1 arg.name #2 "if match" #3 "then set to" #4"secret
 }
 
 echo "INFO >>> Detecting Linux distribution operating system compatibility"
+dist_val="unknown"
+cat /etc/*release | grep -i debian | grep -i debian > /dev/null && dist_val="debian"
+cat /etc/*release | grep -i ubuntu | grep -i ubuntu > /dev/null && dist_val="ubuntu"
+
 cat /etc/*release | grep -i -e debian -e ubuntu > /dev/null;
 if [[ ${?} != 0 ]]; then
    cat /etc/*release
@@ -119,7 +128,7 @@ echo "INFO >>> Detecting Linux distribution 'sudo'/'su' compatibility"
 sudo -v; (test $? != 0) && su_cmd="echo 'Please enter ROOT password'; su -c" || su_cmd="echo 'Please enter ${USER} sudo password'; sudo sh -c";
 
 echo ""
-echo "DEXSETUP INSTALLER - Blocknet's Decentralized Exchange Backend System Installer for Debian/Ubuntu based Linux distributions, namely dexsetup framework"
+echo "DEX INSTALLER - Complete Blocknet's Decentralized Exchange Base Backend System Installer for Debian/Ubuntu based Linux distributions (dexinstaller, dexsetup, dexbot, BlockDX, Blocknet etc..)"
 echo "We build decentralized system which has NO central point of failure or control"
 echo "What it is and does:"
 echo "It is advanced multipurpose tool to build genuine decentralized systems"
@@ -155,9 +164,11 @@ else
    pkg_privacy=""
 fi
 
+#TODO detect Ubuntu vs Debian bc linux-cpupower
+
 tool_interactivity "pkg-build-y" "pkg-build-n" "Would you like to set to install mandatory to have command line interface build packages?"
 if [[ "${var_q}" == "y" ]]; then
-   pkg_cli_build="curl wget git make cmake clang clang-tools clang-format libclang1 libboost-all-dev basez libprotobuf-dev protobuf-compiler libssl-dev openssl gcc g++ python3-pip python3-dateutil cargo pkg-config libseccomp-dev libcap-dev libsecp256k1-dev firejail firejail-profiles seccomp proxychains4 tor libsodium-dev libgmp-dev screen libfmt-dev linux-cpupower libdb-dev libdb5.3++-dev"
+   pkg_cli_build="curl wget git make cmake clang clang-tools clang-format libclang1 libboost-all-dev basez libprotobuf-dev protobuf-compiler libssl-dev openssl gcc g++ python3-pip python3-dateutil cargo pkg-config libseccomp-dev libcap-dev libsecp256k1-dev firejail firejail-profiles seccomp proxychains4 tor libsodium-dev libgmp-dev screen libfmt-dev libdb-dev libdb5.3++-dev"
 else
    pkg_cli_build=""
 fi
@@ -171,15 +182,36 @@ fi
 
 tool_interactivity "pkg-gui-build-y" "pkg-gui-build-n" "Would you like to set to install optional graphical user interface build packages?"
 if [[ "${var_q}" == "y" ]]; then
-   pkg_gui_build="qt5-qmake-bin qt5-qmake qttools5-dev-tools qttools5-dev qtbase5-dev-tools qtbase5-dev libqt5charts5-dev python3-gst-1.0 libqrencode-dev"
+   pkg_gui_build="qt5-qmake-bin qt5-qmake qttools5-dev-tools qttools5-dev qtbase5-dev-tools qtbase5-dev libqt5charts5-dev python3-gst-1.0 libqrencode-dev libqt5svg5-dev"
 else
    pkg_gui_build=""
 fi
 
-tool_interactivity "pkg-gui-tools-y" "pkg-gui-tools-n" "Would you like to set to install optional graphical user interface packages and support for Tiger VNC server?"
+tool_interactivity "pkg-mate-desktop-y" "pkg-mate-desktop-n" "Would you like to set to install Mate Desktop Environment(could be configured with VNC remote desktop)?"
 if [[ "${var_q}" == "y" ]]; then
-   pkg_gui_tools="gitg keepassx geany xsensors tigervnc-standalone-server"
-   tool_interactivity "vnc-autostart-y" "vnc-autostart-n" "Would you like to set to setup tigervnc server to start automatically after startup?"
+   pkg_mate_desktop="mate-desktop mate-desktop-environment-core mate-tweak mate-utils mate-utils-common mate-themes mate-applets mate-calc mate-notification-daemon mate-screensaver mate-sensors-applet"
+else
+   pkg_mate_desktop=""
+fi
+
+tool_interactivity "pkg-gui-tools-y" "pkg-gui-tools-n" "Would you like to set to install useful graphical user interface packages tools(gitg, keepassx, geany, xsensors, synaptic..)?"
+
+if [[ "${var_q}" == "y" ]]; then
+   pkg_gui_tools="gitg keepassxc geany xsensors synaptic"
+else
+   pkg_gui_tools=""
+fi
+
+tool_interactivity "pkg-vnc-tools-y" "pkg-vnc-tools-n" "Would you like to set to install Tiger VNC server(remote desktop support)?"
+if [[ "${var_q}" == "y" ]]; then
+   pkg_vnc="tigervnc-standalone-server"
+else
+   pkg_vnc=""
+fi
+
+# if tiger VNC is going to be installed could be configure to autostart
+if [[ "${pkg_vnc}" != "" ]]; then
+   tool_interactivity "vnc-autostart-y" "vnc-autostart-n" "Would you like to set to setup Tiger VNC server to start automatically '${USER}' session after startup?"
    if [[ "${var_q}" == "y" ]]; then
       #~ grep "^:1=${USER}$" /etc/tigervnc/vncserver.users >> /dev/null && cfg_user_vnc="echo 'TigerVNC for ${USER} is already configured'" || cfg_user_vnc="echo ':1=${USER}' >> /etc/tigervnc/vncserver.users; systemctl start tigervncserver@:1.service; systemctl enable tigervncserver@:1.service";
       port=1
@@ -202,10 +234,6 @@ if [[ "${var_q}" == "y" ]]; then
          fi
       done
    fi
-   tigervnc_yes="y"
-else
-   pkg_gui_tools=""
-   tigervnc_yes=""
 fi
 
 [[ "${cfg_user_tor}" == "" ]] && cfg_user_tor="echo 'no Tor service for ${USER} is going to be configured'"
@@ -213,7 +241,7 @@ fi
 
 while : ; do
    # make system update and setup command
-   eval_cmdd="${su_cmd} \"${pkg_update}; apt -y install apt ${pkg_privacy} ${pkg_cli_build} ${pkg_cli_tools} ${pkg_gui_build} ${pkg_gui_tools}; ${cfg_user_tor}; ${cfg_user_vnc}; exit\""
+   eval_cmdd="${su_cmd} \"${pkg_update}; apt -y install apt ${pkg_privacy} ${pkg_cli_build} ${pkg_cli_tools} ${pkg_gui_build} ${pkg_mate_desktop} ${pkg_gui_tools} ${pkg_vnc}; ${cfg_user_tor}; ${cfg_user_vnc}; exit\""
    # log message system update and setup command
    echo ""
    echo "${eval_cmdd}"
@@ -248,7 +276,9 @@ while : ; do
    fi
 done
 
-if [[ "${tigervnc_yes}" == "y" ]]; then
+# if Tiger VNC,
+# then we could set VNC password
+if [[ "${pkg_vnc}" != "" ]]; then
    tool_interactivity "vnc-setpassword-y" "vnc-setpassword-n" "Would you like to setup VNC user login password?"
    if [[ "${var_q}" == "y" ]]; then
       tool_arg_value "vncpasswd" "" "" "secret" ""
@@ -263,6 +293,31 @@ if [[ "${tigervnc_yes}" == "y" ]]; then
    fi
 fi
 
+# if Tiger VNC and Mate Desktop is going to be installed and VNC configured to autostart,
+# then we can configure vncsession with Mate desktop session
+if [[ "${pkg_vnc}" != "" ]] && [[ "${pkg_mate_desktop}" != "" ]]; then
+   tool_interactivity "vnc-mate-desktop-y" "vnc-mate-desktop-n" "Would you like to set Tiger VNC '${USER}' session to use Mate Desktop?"
+   if [[ "${var_q}" == "y" ]]; then
+      mv ~/.vnc/xstartup ~/.vnc/xstartup_`date +'%Y_%m_%d_%H%M%S'`
+      echo "#!/bin/sh
+
+xrdb \"$HOME/.Xresources\"
+#xsetroot -solid grey
+
+#x-terminal-emulator -geometry 80x24+10+10 -ls -title \"$VNCDESKTOP Desktop\" &
+#x-window-manager &
+# Fix to make GNOME work
+
+#export XKL_XMODMAP_DISABLE=1
+#/etc/X11/Xsession
+
+unset SESSION_MANAGER
+# unset DBUS_SESSION_BUS_ADDRESS
+exec mate-session" > ~/.vnc/xstartup && chmod +x ~/.vnc/xstartup
+      (test $? != 0) && echo "ERROR >>> make vnc xstartup file failed" && exit 1
+   fi
+fi
+
 echo "making and changing directory to (~/dexsetup)"
 mkdir -p ./dexsetup && cd ./dexsetup
 (test $? != 0) && echo "ERROR >>> Failed to make and change directory to (~/dexsetup)" && exit 1
@@ -274,7 +329,7 @@ if [[ ${?} != 0 ]]; then
    if [[ "${var_q}" == "y" ]]; then
       echo "INFO >>> DEXSETUP re-installation/update in progress"
       git stash \
-      && git checkout merge.2025.02.06 \
+      && git checkout ${dexsetup_git_branch} \
       && proxychains4 git pull \
       && chmod 755 setup* \
       && chmod 755 ./src/setup*.sh
@@ -283,7 +338,7 @@ if [[ ${?} != 0 ]]; then
       echo "ERROR >>> DEXSETUP is already installed and update been skip"
    fi
 else
-   git checkout merge.2025.02.06 \
+   git checkout ${dexsetup_git_branch} \
    && chmod 755 setup* \
    && chmod 755 ./src/setup*.sh
    (test $? != 0) && echo "ERROR >>> switch to experimental DEXSETUP version failed" && exit 1
@@ -311,11 +366,27 @@ echo "Building wallets from official repositories..."
 function tool_setup_wallet() {  #crypto_name  #crypto_ticker  #cfg_script_path  #download_build_action
    tool_interactivity "${2}-install-y" "${2}-install-n" "Would you like to install or update ${1}(${2}) wallet?"
    if [[ "${var_q}" == "y" ]]; then
-      ./setup.cc.wallet.sh $3 install $4
+      
+      # choose between building from source and download
+      tool_arg_value "${2}-build-download" "" "${4}" "" "choose between build/download"
+      if [[ "$?" == "0" ]]; then
+         if [[ "${var_v}" == "build" ]]; then
+            build_download=${var_v}
+         elif [[ "${var_v}" == "download" ]]; then
+            build_download=${var_v}
+         else
+            echo "ERROR >>> invalid ${2}-build-download argument, allowed values are build/download"
+            exit 1
+         fi
+      else
+         build_download=${4}
+      fi
+      
+      ./setup.cc.wallet.sh ${3} install ${build_download}
       if [[ ${?} != 0 ]]; then
          tool_interactivity "${2}-update-y" "${2}-update-n" "${1} wallet installation failed or is already installed, would you like to try to update ${1} wallet?"
          if [[ "${var_q}" == "y" ]]; then
-            ./setup.cc.wallet.sh $3 update $4
+            ./setup.cc.wallet.sh ${3} update ${build_download}
             if [[ ${?} != 0 ]]; then
                tool_interactivity "skip-failed-install-y" "skip-failed-install-n" "${1} wallet update failed, would you like to skip this wallet and continue?"
                if [[ "${var_q}" != "y" ]]; then
@@ -334,8 +405,10 @@ tool_setup_wallet "Dogecoin" "DOGE" "./src/cfg.cc.dogecoin.sh" "build"
 tool_setup_wallet "Dash" "DASH" "./src/cfg.cc.dash.sh" "build"
 tool_setup_wallet "PIVX" "PIVX" "./src/cfg.cc.pivx.sh" "build"
 tool_setup_wallet "Verge" "XVG" "./src/cfg.cc.verge.sh" "build"
-tool_setup_wallet "Lbry Credits LevelDB" "LBC" "./src/cfg.cc.lbrycrd.leveldb.sh" "build"
-tool_setup_wallet "Lbry Credits SQLITE" "LBC" "./src/cfg.cc.lbrycrd.sqlite.sh" "build"
+tool_setup_wallet "Bitcoincash unlimited" "BCH" "./src/cfg.cc.bch.unlimited.sh" "build"
+tool_setup_wallet "Bitcoincash node" "BCH" "./src/cfg.cc.bch.node.sh" "download"
+#~ tool_setup_wallet "Lbry Credits LevelDB" "LBC" "./src/cfg.cc.lbrycrd.leveldb.sh" "build"
+#~ tool_setup_wallet "Lbry Credits SQLITE" "LBC" "./src/cfg.cc.lbrycrd.sqlite.sh" "build"
 tool_setup_wallet "Pocketcoin(Bastyon.com)" "PKOIN" "./src/cfg.cc.pocketcoin.sh" "build"
 tool_setup_wallet "Particl" "PART" "./src/cfg.cc.particl.sh" "build"
 
@@ -373,8 +446,10 @@ if [[ "${var_q}" == "y" ]]; then
    tool_setup_wallet_profile "DOGE-dex" ./src/cfg.cc.dogecoin.sh
    tool_setup_wallet_profile "PIVX-dex" ./src/cfg.cc.pivx.sh
    tool_setup_wallet_profile "DASH-dex" ./src/cfg.cc.dash.sh
-   tool_setup_wallet_profile "LBC-dex" ./src/cfg.cc.lbrycrd.leveldb.sh
-   tool_setup_wallet_profile "LBC-dex" ./src/cfg.cc.lbrycrd.sqlite.sh
+   tool_setup_wallet_profile "BCH-unlimited-dex" ./src/cfg.cc.bch.unlimited.sh
+   tool_setup_wallet_profile "BCH-node-dex" ./src/cfg.cc.bch.node.sh
+   #~ tool_setup_wallet_profile "LBC-dex" ./src/cfg.cc.lbrycrd.leveldb.sh
+   #~ tool_setup_wallet_profile "LBC-dex" ./src/cfg.cc.lbrycrd.sqlite.sh
    tool_setup_wallet_profile "PKOIN-dex" ./src/cfg.cc.pocketcoin.sh
    tool_setup_wallet_profile "PART-dex" ./src/cfg.cc.particl.sh
 fi
@@ -451,22 +526,51 @@ function tool_setup_dexbot_profile() {
 tool_interactivity "dexbot-strategies-y" "dexbot-strategies-n" "Would you like to setup DEXBOT and trading strategies with DEX trading wallet profiles?"
 if [[ "${var_q}" == "y" ]]; then
    strategies_enabled="1"
-   tool_setup_dexbot_profile "BLOCK" "LTC" ./src/cfg.cc.blocknet.sh ./src/cfg.cc.blocknet.sh ./src/cfg.cc.litecoin.sh ./src/cfg.dexbot.alfa.sh ./src/cfg.strategy.block.ltc.sh strategy1 blocknet01 litecoin01
    
+   #BLOCK
+   tool_setup_dexbot_profile "BLOCK" "BCH" ./src/cfg.cc.blocknet.sh ./src/cfg.cc.blocknet.sh ./src/cfg.cc.bch.unlimited.sh ./src/cfg.dexbot.alfa.sh ./src/cfg.strategy.block.bch.sh strategy1 unique_block_addr unique_bch_addr
+   
+   tool_setup_dexbot_profile "BLOCK" "BTC" ./src/cfg.cc.blocknet.sh ./src/cfg.cc.blocknet.sh ./src/cfg.cc.bitcoin.sh ./src/cfg.dexbot.alfa.sh ./src/cfg.strategy.block.btc.sh strategy1 unique_block_addr unique_btc_addr
+   
+   tool_setup_dexbot_profile "BLOCK" "DASH" ./src/cfg.cc.blocknet.sh ./src/cfg.cc.blocknet.sh ./src/cfg.cc.dash.sh ./src/cfg.dexbot.alfa.sh ./src/cfg.strategy.block.dash.sh strategy1 unique_block_addr unique_dash_addr
+   
+   tool_setup_dexbot_profile "BLOCK" "DOGE" ./src/cfg.cc.blocknet.sh ./src/cfg.cc.blocknet.sh ./src/cfg.cc.dogecoin.sh ./src/cfg.dexbot.alfa.sh ./src/cfg.strategy.block.doge.sh strategy1 unique_block_addr unique_doge_addr
+   
+   tool_setup_dexbot_profile "BLOCK" "LTC" ./src/cfg.cc.blocknet.sh ./src/cfg.cc.blocknet.sh ./src/cfg.cc.litecoin.sh ./src/cfg.dexbot.alfa.sh ./src/cfg.strategy.block.ltc.sh strategy1 unique_block_addr unique_ltc_addr
+   
+   tool_setup_dexbot_profile "BLOCK" "PART" ./src/cfg.cc.blocknet.sh ./src/cfg.cc.blocknet.sh ./src/cfg.cc.particl.sh ./src/cfg.dexbot.alfa.sh ./src/cfg.strategy.block.part.sh strategy1 unique_block_addr unique_part_addr
+   
+   tool_setup_dexbot_profile "BLOCK" "PIVX" ./src/cfg.cc.blocknet.sh ./src/cfg.cc.blocknet.sh ./src/cfg.cc.pivx.sh ./src/cfg.dexbot.alfa.sh ./src/cfg.strategy.block.pivx.sh strategy1 unique_block_addr unique_pivx_addr
+   
+   tool_setup_dexbot_profile "BLOCK" "PKOIN" ./src/cfg.cc.blocknet.sh ./src/cfg.cc.blocknet.sh ./src/cfg.cc.pocketcoin.sh ./src/cfg.dexbot.alfa.sh ./src/cfg.strategy.block.pkoin.sh strategy1 unique_block_addr unique_pkoin_addr
+   
+   tool_setup_dexbot_profile "BLOCK" "XVG" ./src/cfg.cc.blocknet.sh ./src/cfg.cc.blocknet.sh ./src/cfg.cc.verge.sh ./src/cfg.dexbot.alfa.sh ./src/cfg.strategy.block.xvg.sh strategy1 unique_block_addr unique_xvg_addr
+   
+   #BTC
    tool_setup_dexbot_profile "BTC" "LTC" ./src/cfg.cc.blocknet.sh ./src/cfg.cc.bitcoin.sh ./src/cfg.cc.litecoin.sh ./src/cfg.dexbot.alfa.sh ./src/cfg.strategy.btc.ltc.sh strategy1 bitcoin01 litecoin02
    
+   #XVG
    tool_setup_dexbot_profile "XVG" "LTC" ./src/cfg.cc.blocknet.sh ./src/cfg.cc.verge.sh ./src/cfg.cc.litecoin.sh ./src/cfg.dexbot.alfa.sh ./src/cfg.strategy.xvg.ltc.sh strategy1 verge01 litecoin03
    
+   #DOGE
    tool_setup_dexbot_profile "DOGE" "LTC" ./src/cfg.cc.blocknet.sh ./src/cfg.cc.dogecoin.sh ./src/cfg.cc.litecoin.sh ./src/cfg.dexbot.alfa.sh ./src/cfg.strategy.doge.ltc.sh strategy1 dogecoin01 litecoin04
    
+   #PIVX
    tool_setup_dexbot_profile "PIVX" "LTC" ./src/cfg.cc.blocknet.sh ./src/cfg.cc.pivx.sh ./src/cfg.cc.litecoin.sh ./src/cfg.dexbot.alfa.sh ./src/cfg.strategy.pivx.ltc.sh strategy1 pivx01 litecoin05
    
+   #DASH
    tool_setup_dexbot_profile "DASH" "LTC"  ./src/cfg.cc.blocknet.sh ./src/cfg.cc.dash.sh ./src/cfg.cc.litecoin.sh ./src/cfg.dexbot.alfa.sh ./src/cfg.strategy.dash.ltc.sh strategy1 dash01 litecoin06
    
-   tool_setup_dexbot_profile "LBC" "LTC"  ./src/cfg.cc.blocknet.sh ./src/cfg.cc.lbrycrd.leveldb.sh ./src/cfg.cc.litecoin.sh ./src/cfg.dexbot.alfa.sh ./src/cfg.strategy.lbc.ltc.sh strategy1 lbrycrd01 litecoin07
+   #BCH
+   tool_setup_dexbot_profile "BCH" "LTC"  ./src/cfg.cc.blocknet.sh ./src/cfg.cc.bch.unlimited.sh ./src/cfg.cc.litecoin.sh ./src/cfg.dexbot.alfa.sh ./src/cfg.strategy.bch.ltc.sh strategy1 bitcoincash01 litecoin07
    
+   #LBC
+   #~ tool_setup_dexbot_profile "LBC" "LTC"  ./src/cfg.cc.blocknet.sh ./src/cfg.cc.lbrycrd.leveldb.sh ./src/cfg.cc.litecoin.sh ./src/cfg.dexbot.alfa.sh ./src/cfg.strategy.lbc.ltc.sh strategy1 lbrycrd01 litecoin07
+   
+   #PKOIN
    tool_setup_dexbot_profile "PKOIN" "LTC"  ./src/cfg.cc.blocknet.sh ./src/cfg.cc.pocketcoin.sh ./src/cfg.cc.litecoin.sh ./src/cfg.dexbot.alfa.sh ./src/cfg.strategy.pkoin.ltc.sh strategy1 pocketcoin01 litecoin08
    
+   #PART
    tool_setup_dexbot_profile "PART" "LTC" ./src/cfg.cc.blocknet.sh ./src/cfg.cc.particl.sh ./src/cfg.cc.litecoin.sh ./src/cfg.dexbot.alfa.sh ./src/cfg.strategy.part.ltc.sh strategy1 particl01 litecoin09
 fi
 
@@ -516,6 +620,24 @@ tool_interactivity "session-profile-y" "session-profile-n" "Would you like to au
 if [[ "${var_q}" == "y" ]]; then
    ./setup.session.profile.sh default
    (test $? != 0) && echo "setup SESSION profile failed" && exit 1
+fi
+
+tool_interactivity "simplex-y" "simplex-n" "Would you like to install SIMPLEX privacy messenger app?"
+if [[ "${var_q}" == "y" ]]; then
+   ./setup.simplex.sh download install 
+   if [[ ${?} != 0 ]]; then
+      tool_interactivity "simplex-update-y" "simplex-update-n" "SIMPLEX app seems already installed, would you like to try to update it to latest version first?"
+      if [[ "${var_q}" == "y" ]]; then
+         ./setup.simplex.sh update
+         (test $? != 0) && echo "Setup SIMPLEX app failed" && exit 1
+      fi
+   fi
+fi
+
+tool_interactivity "simplex-profile-y" "simplex-profile-n" "Would you like to auto-configure SIMPLEX default profile?"
+if [[ "${var_q}" == "y" ]]; then
+   ./setup.simplex.profile.sh default
+   (test $? != 0) && echo "setup SIMPLEX profile failed" && exit 1
 fi
 
 tool_interactivity "tor-browser-y" "tor-browser-n" "Would you like to install tor-browser ultimate privacy web browser?"
