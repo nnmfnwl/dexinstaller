@@ -41,7 +41,7 @@ sudo -v; (test $? != 0) && su_cmd="echo 'Please enter ROOT password'; su - -c" |
 eval "${su_cmd} \"apt -y update; apt -y full-upgrade; apt -y install ${pkgs}; ${cfg_user_tor}; exit\""
 
 #download installer and verify file checksum
-branch="dev.2025.10.23" && mkdir -p ~/dexsetup && cd ~/dexsetup && rm -f installer.sh && proxychains4 wget "https://github.com/nnmfnwl/dexinstaller/raw/refs/heads/${branch}/installer.sh" && proxychains4 wget "https://github.com/nnmfnwl/dexinstaller/raw/refs/heads/${branch}/installer.sha512" && sha512sum installer.sh | grep `cat installer.sha512` && (echo "installer fingerprint verification success") || (sha512sum installer.sh; echo "installer fingerprint verification failed"; rm -f installer.sh)
+branch="main" && mkdir -p ~/dexsetup && cd ~/dexsetup && rm -f installer.sh && proxychains4 wget "https://github.com/nnmfnwl/dexinstaller/raw/refs/heads/${branch}/installer.sh" && proxychains4 wget "https://github.com/nnmfnwl/dexinstaller/raw/refs/heads/${branch}/installer.sha512" && sha512sum installer.sh | grep `cat installer.sha512` && (echo "installer fingerprint verification success") || (sha512sum installer.sh; echo "installer fingerprint verification failed"; rm -f installer.sh)
 
 # installer argument DEFAULT-Y is used to automatically answer yes to install or update or forces every component of decentralized exchange system to be set to default expected stage
 cd ~/dexsetup && bash installer.sh DEFAULT-Y
