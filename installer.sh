@@ -10,7 +10,8 @@ argvv=("$@")
 
 # define
 #~ dexsetup_git_branch="merge.2025.02.06"
-dexsetup_git_branch="dev.2025.10.23"
+#~ dexsetup_git_branch="dev.2025.10.23"
+dexsetup_git_branch="main"
 
 # interactivity function definition. find yes or no arguments or ask interactively
 function tool_interactivity() { #toyes #tono #info
