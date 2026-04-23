@@ -32,7 +32,7 @@ eval "${su_cmd} \"apt -y update; apt -y full-upgrade; apt -y install ${pkgs}; ${
   * **download or update installer**
   * installer is downloaded anonymously and verified if digital fingerprint match
 ```
-branch="main" && mkdir -p ~/dexsetup && cd ~/dexsetup && rm -f installer.sh && rm -f installer.sha512 && proxychains4 wget "https://github.com/nnmfnwl/dexinstaller/raw/refs/heads/${branch}/installer.sh" && proxychains4 wget "https://github.com/nnmfnwl/dexinstaller/raw/refs/heads/${branch}/installer.sha512" && sha512sum installer.sh | grep `cat installer.sha512` && (echo "installer fingerprint verification success") || (sha512sum installer.sh; echo "installer fingerprint verification failed"; rm -f installer.sh)
+branch="dev.2026.04" && mkdir -p ~/dexsetup && cd ~/dexsetup && rm -f installer.sh && rm -f installer.sha512 && proxychains4 wget "https://github.com/nnmfnwl/dexinstaller/raw/refs/heads/${branch}/installer.sh" && proxychains4 wget "https://github.com/nnmfnwl/dexinstaller/raw/refs/heads/${branch}/installer.sha512" && sha512sum installer.sh | grep `cat installer.sha512` && (echo "installer fingerprint verification success") || (sha512sum installer.sh; echo "installer fingerprint verification failed"; rm -f installer.sh)
 ```
   * **run installer in full interactive mode**:
 ```
