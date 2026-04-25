@@ -10,6 +10,7 @@ argvv=("$@")
 
 # define
 #~ dexsetup_git_branch="merge.2025.02.06"
+#~ dexsetup_git_branch="dev.2025.10.23"
 dexsetup_git_branch="dev.2026.04"
 #~ dexsetup_git_branch="main"
 
@@ -424,6 +425,11 @@ function tool_setup_wallet_profile() {  #crypto_name  #cfg_script_path
       fi
    fi
 }
+
+tool_interactivity "master-node-profiles-y" "master-node-profiles-n" "Would you like to setup fully privacy focused master(service) node services setup? This advanced configuration not need any public domain name, it is using HSV3(tor onion hidden service version 3) to protect your privacy."
+if [[ "${var_q}" == "y" ]]; then
+   tool_setup_wallet_profile "BLOCK-snode" ./src/cfg.cc.blocknet.snode.sh
+fi
 
 tool_interactivity "dao-profiles-y" "dao-profiles-n" "Would you like to setup also standalone DAO profiles for blocknet?"
 if [[ "${var_q}" == "y" ]]; then
