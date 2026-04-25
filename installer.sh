@@ -330,6 +330,7 @@ if [[ ${?} != 0 ]]; then
    if [[ "${var_q}" == "y" ]]; then
       echo "INFO >>> DEXSETUP re-installation/update in progress"
       git stash \
+      && proxychains4 git pull \
       && git checkout ${dexsetup_git_branch} \
       && proxychains4 git pull \
       && chmod 755 setup* \
