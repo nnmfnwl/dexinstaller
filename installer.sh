@@ -11,6 +11,7 @@ argvv=("$@")
 # define
 #~ dexsetup_git_branch="merge.2025.02.06"
 #~ dexsetup_git_branch="dev.2025.10.23"
+#~ dexsetup_git_branch="dev.2026.04"
 dexsetup_git_branch="main"
 
 # interactivity function definition. find yes or no arguments or ask interactively
@@ -329,6 +330,7 @@ if [[ ${?} != 0 ]]; then
    if [[ "${var_q}" == "y" ]]; then
       echo "INFO >>> DEXSETUP re-installation/update in progress"
       git stash \
+      && proxychains4 git pull \
       && git checkout ${dexsetup_git_branch} \
       && proxychains4 git pull \
       && chmod 755 setup* \
@@ -424,6 +426,54 @@ function tool_setup_wallet_profile() {  #crypto_name  #cfg_script_path
       fi
    fi
 }
+
+#1 ticker1   #2 ticker2   #3 block script   #4 ticker 1 script   #5 ticker 2 script   #6 dexbot script  #7 dexbot strategy template  #8 strategy name #9 addr_a   #10 addr_b
+function tool_setup_snode_dexbot_profile() {  
+   tool_interactivity "${1}-${2}-snode-y" "${1}-${2}-snode-n" "Would you like to setup snode service for DEX DEXBOT ${1}/${2} trading pair?"
+   if [[ "${var_q}" == "y" ]]; then
+      
+      ./setup.cc.dexbot.profile.sh ${3} ${4} ${5} ${6} ${7} ${8} ${9} ${10} 
+      if [[ ${?} != 0 ]]; then
+         tool_interactivity "${1}-${2}-snode-update-y" "${1}-${2}-snode-update-n" "snode service for ${1}/${2} trading is already installed, would you like to try to update it?"
+         if [[ "${var_q}" == "y" ]]; then
+            ./setup.cc.dexbot.profile.sh ${3} ${4} ${5} ${6} ${7} ${8} ${9} ${10} update_strategy update_source
+            if [[ ${?} != 0 ]]; then
+               tool_interactivity "${1}-${2}-snode-skip-failed-y" "${1}-${2}-snode-skip-failed-n" "snode service for ${1}/${2} trading failed, would you like to skip and continue?"
+               if [[ "${var_q}" != "y" ]]; then
+                  echo "ERROR >>> setup snode for ${1}/(${2}) trading failed " && exit 1
+               fi
+            fi
+         fi
+      fi
+   fi
+}
+
+tool_interactivity "master-node-profiles-y" "master-node-profiles-n" "Would you like to setup fully privacy focused master(service) node services setup? This advanced configuration not need any public domain name, it is using HSV3(tor onion hidden service version 3) to protect your privacy."
+if [[ "${var_q}" == "y" ]]; then
+
+   # SNODE
+   tool_setup_wallet_profile "BLOCK-snode" ./src/cfg.cc.blocknet.snode.sh
+   
+   #BLOCK/XXX snode service
+   tool_setup_snode_dexbot_profile "BLOCK" "BCH" ./src/cfg.cc.blocknet.snode.sh ./src/cfg.cc.blocknet.snode.sh ./src/cfg.cc.bch.unlimited.sh ./src/cfg.dexbot.alfa.sh ./src/cfg.strategy.block.bch.sh strategy1snode unique_block_addr unique_bch_addr
+   
+   tool_setup_snode_dexbot_profile "BLOCK" "BTC" ./src/cfg.cc.blocknet.snode.sh ./src/cfg.cc.blocknet.snode.sh ./src/cfg.cc.bitcoin.sh ./src/cfg.dexbot.alfa.sh ./src/cfg.strategy.block.btc.sh strategy1snode unique_block_addr unique_btc_addr
+   
+   tool_setup_snode_dexbot_profile "BLOCK" "DASH" ./src/cfg.cc.blocknet.snode.sh ./src/cfg.cc.blocknet.snode.sh ./src/cfg.cc.dash.sh ./src/cfg.dexbot.alfa.sh ./src/cfg.strategy.block.dash.sh strategy1snode unique_block_addr unique_dash_addr
+   
+   tool_setup_snode_dexbot_profile "BLOCK" "DOGE" ./src/cfg.cc.blocknet.snode.sh ./src/cfg.cc.blocknet.snode.sh ./src/cfg.cc.dogecoin.sh ./src/cfg.dexbot.alfa.sh ./src/cfg.strategy.block.doge.sh strategy1snode unique_block_addr unique_doge_addr
+   
+   tool_setup_snode_dexbot_profile "BLOCK" "LTC" ./src/cfg.cc.blocknet.snode.sh ./src/cfg.cc.blocknet.snode.sh ./src/cfg.cc.litecoin.sh ./src/cfg.dexbot.alfa.sh ./src/cfg.strategy.block.ltc.sh strategy1snode unique_block_addr unique_ltc_addr
+   
+   tool_setup_snode_dexbot_profile "BLOCK" "PART" ./src/cfg.cc.blocknet.snode.sh ./src/cfg.cc.blocknet.snode.sh ./src/cfg.cc.particl.sh ./src/cfg.dexbot.alfa.sh ./src/cfg.strategy.block.part.sh strategy1snode unique_block_addr unique_part_addr
+   
+   tool_setup_snode_dexbot_profile "BLOCK" "PIVX" ./src/cfg.cc.blocknet.snode.sh ./src/cfg.cc.blocknet.snode.sh ./src/cfg.cc.pivx.sh ./src/cfg.dexbot.alfa.sh ./src/cfg.strategy.block.pivx.sh strategy1snode unique_block_addr unique_pivx_addr
+   
+   tool_setup_snode_dexbot_profile "BLOCK" "PKOIN" ./src/cfg.cc.blocknet.snode.sh ./src/cfg.cc.blocknet.snode.sh ./src/cfg.cc.pocketcoin.sh ./src/cfg.dexbot.alfa.sh ./src/cfg.strategy.block.pkoin.sh strategy1snode unique_block_addr unique_pkoin_addr
+   
+   tool_setup_snode_dexbot_profile "BLOCK" "XVG" ./src/cfg.cc.blocknet.snode.sh ./src/cfg.cc.blocknet.snode.sh ./src/cfg.cc.verge.sh ./src/cfg.dexbot.alfa.sh ./src/cfg.strategy.block.xvg.sh strategy1snode unique_block_addr unique_xvg_addr
+   
+fi
 
 tool_interactivity "dao-profiles-y" "dao-profiles-n" "Would you like to setup also standalone DAO profiles for blocknet?"
 if [[ "${var_q}" == "y" ]]; then
