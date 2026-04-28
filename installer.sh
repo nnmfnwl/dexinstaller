@@ -432,11 +432,11 @@ function tool_setup_snode_dexbot_profile() {
    tool_interactivity "${1}-${2}-snode-y" "${1}-${2}-snode-n" "Would you like to setup snode service for DEX DEXBOT ${1}/${2} trading pair?"
    if [[ "${var_q}" == "y" ]]; then
       
-      ./setup.cc.dexbot.profile.sh ${3} ${4} ${5} ${6} ${strategy_cfg} ${strategy_name} ${strategy_addr_a} ${strategy_addr_b} 
+      ./setup.cc.dexbot.profile.sh ${3} ${4} ${5} ${6} ${7} ${8} ${9} ${10} 
       if [[ ${?} != 0 ]]; then
          tool_interactivity "${1}-${2}-snode-update-y" "${1}-${2}-snode-update-n" "snode service for ${1}/${2} trading is already installed, would you like to try to update it?"
          if [[ "${var_q}" == "y" ]]; then
-            ./setup.cc.dexbot.profile.sh ${3} ${4} ${5} ${6} ${strategy_cfg} ${strategy_name} ${strategy_addr_a} ${strategy_addr_b} update_strategy update_source
+            ./setup.cc.dexbot.profile.sh ${3} ${4} ${5} ${6} ${7} ${8} ${9} ${10} update_strategy update_source
             if [[ ${?} != 0 ]]; then
                tool_interactivity "${1}-${2}-snode-skip-failed-y" "${1}-${2}-snode-skip-failed-n" "snode service for ${1}/${2} trading failed, would you like to skip and continue?"
                if [[ "${var_q}" != "y" ]]; then
