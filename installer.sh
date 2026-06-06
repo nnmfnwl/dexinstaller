@@ -413,6 +413,7 @@ tool_setup_wallet "Bitcoincash node" "BCH" "./src/cfg.cc.bch.node.sh" "download"
 #~ tool_setup_wallet "Lbry Credits SQLITE" "LBC" "./src/cfg.cc.lbrycrd.sqlite.sh" "build"
 tool_setup_wallet "Pocketcoin(Bastyon.com)" "PKOIN" "./src/cfg.cc.pocketcoin.sh" "build"
 tool_setup_wallet "Particl" "PART" "./src/cfg.cc.particl.sh" "build"
+tool_setup_wallet "Bitcore" "BTX" "./src/cfg.cc.bitcore.sh" "build"
 
 echo "Wallets profiling setup"
 
@@ -473,6 +474,8 @@ if [[ "${var_q}" == "y" ]]; then
    
    tool_setup_snode_dexbot_profile "BLOCK" "XVG" ./src/cfg.cc.blocknet.snode.sh ./src/cfg.cc.blocknet.snode.sh ./src/cfg.cc.verge.sh ./src/cfg.dexbot.alfa.sh ./src/cfg.strategy.block.xvg.sh strategy1snode unique_block_addr unique_xvg_addr
    
+   tool_setup_snode_dexbot_profile "BLOCK" "BTX" ./src/cfg.cc.blocknet.snode.sh ./src/cfg.cc.blocknet.snode.sh ./src/cfg.cc.bitcore.sh ./src/cfg.dexbot.alfa.sh ./src/cfg.strategy.block.btx.sh strategy1snode unique_block_addr unique_btx_addr
+   
 fi
 
 tool_interactivity "dao-profiles-y" "dao-profiles-n" "Would you like to setup also standalone DAO profiles for blocknet?"
@@ -502,6 +505,7 @@ if [[ "${var_q}" == "y" ]]; then
    #~ tool_setup_wallet_profile "LBC-dex" ./src/cfg.cc.lbrycrd.sqlite.sh
    tool_setup_wallet_profile "PKOIN-dex" ./src/cfg.cc.pocketcoin.sh
    tool_setup_wallet_profile "PART-dex" ./src/cfg.cc.particl.sh
+   tool_setup_wallet_profile "BTX-dex" ./src/cfg.cc.bitcore.sh
 fi
 
 #setup custom dexbot profile
@@ -596,6 +600,8 @@ if [[ "${var_q}" == "y" ]]; then
    
    tool_setup_dexbot_profile "BLOCK" "XVG" ./src/cfg.cc.blocknet.sh ./src/cfg.cc.blocknet.sh ./src/cfg.cc.verge.sh ./src/cfg.dexbot.alfa.sh ./src/cfg.strategy.block.xvg.sh strategy1 unique_block_addr unique_xvg_addr
    
+   tool_setup_dexbot_profile "BLOCK" "BTX" ./src/cfg.cc.blocknet.sh ./src/cfg.cc.blocknet.sh ./src/cfg.cc.bitcore.sh ./src/cfg.dexbot.alfa.sh ./src/cfg.strategy.block.btx.sh strategy1 unique_block_addr unique_btx_addr
+   
    #BTC
    tool_setup_dexbot_profile "BTC" "LTC" ./src/cfg.cc.blocknet.sh ./src/cfg.cc.bitcoin.sh ./src/cfg.cc.litecoin.sh ./src/cfg.dexbot.alfa.sh ./src/cfg.strategy.btc.ltc.sh strategy1 bitcoin01 litecoin02
    
@@ -622,6 +628,9 @@ if [[ "${var_q}" == "y" ]]; then
    
    #PART
    tool_setup_dexbot_profile "PART" "LTC" ./src/cfg.cc.blocknet.sh ./src/cfg.cc.particl.sh ./src/cfg.cc.litecoin.sh ./src/cfg.dexbot.alfa.sh ./src/cfg.strategy.part.ltc.sh strategy1 particl01 litecoin09
+   
+   #BTX
+   tool_setup_dexbot_profile "BTX" "LTC" ./src/cfg.cc.blocknet.sh ./src/cfg.cc.bitcore.sh ./src/cfg.cc.litecoin.sh ./src/cfg.dexbot.alfa.sh ./src/cfg.strategy.btx.ltc.sh strategy1 bitcore01 litecoin10
 fi
 
 tool_interactivity "blockdx-install-y" "blockdx-install-n" "Would you like to install BlockDX(Blocknet DEX GUI app)?"
