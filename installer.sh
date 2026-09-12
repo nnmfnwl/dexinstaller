@@ -19,14 +19,12 @@ function tool_interactivity() { #toyes #tono #info
    for (( j=0; j<argcc; j++ )); do
       if [[ "${argvv[j]}" == "${1}" ]]; then
          echo ""
-         echo ">>> ${3}"
-         echo ">>> (been skip by arg '${1} / ${2}') [y to yes]: y"
+         echo ">>> ${3} >>> (been skip by arg '${1} / ${2}') [y to yes]: y"
          var_q="y"
          return 0
       elif [[ "${argvv[j]}" == "${2}" ]]; then
          echo ""
-         echo ">>> ${3}"
-         echo ">>> (been skip by arg '${1} / ${2}') [y to yes]: n"
+         echo ">>> ${3} >>> (been skip by arg '${1} / ${2}') [y to yes]: n"
          var_q="n"
          return 1
       fi
@@ -35,14 +33,12 @@ function tool_interactivity() { #toyes #tono #info
    for (( j=0; j<argcc; j++ )); do
       if [[ "${argvv[j]}" == "DEFAULT-Y" ]]; then
          echo ""
-         echo ">>> ${3}"
-         echo ">>> (been skip by arg '${1} / ${2} / DEFAULT-Y') [y to yes]: y"
+         echo ">>> ${3} >>> (been skip by arg '${1} / ${2} / DEFAULT-Y') [y to yes]: y"
          var_q="y"
          return 0
       elif [[ "${argvv[j]}" == "DEFAULT-N" ]]; then
          echo ""
-         echo ">>> ${3}"
-         echo ">>> (been skip by arg '${1} / ${2} / DEFAULT-N') [y to yes]: n"
+         echo ">>> ${3} >>> (been skip by arg '${1} / ${2} / DEFAULT-N') [y to yes]: n"
          var_q="n"
          return 1
       fi
@@ -169,7 +165,7 @@ fi
 
 tool_interactivity "pkg-build-y" "pkg-build-n" "Would you like to set to install mandatory to have command line interface build packages?"
 if [[ "${var_q}" == "y" ]]; then
-   pkg_cli_build="curl wget git make cmake clang clang-tools clang-format libclang1 libboost-all-dev basez libprotobuf-dev protobuf-compiler libssl-dev openssl gcc g++ python3-pip python3-dateutil cargo pkg-config libseccomp-dev libcap-dev libsecp256k1-dev firejail firejail-profiles seccomp proxychains4 tor libsodium-dev libgmp-dev screen libfmt-dev libdb-dev libdb5.3++-dev"
+   pkg_cli_build="curl wget git make cmake clang clang-tools clang-format libclang1 libboost-all-dev basez libprotobuf-dev protobuf-compiler libssl-dev openssl gcc g++ python3-pip python3-dateutil python3-setuptools cargo pkg-config libseccomp-dev libcap-dev libsecp256k1-dev firejail firejail-profiles seccomp proxychains4 tor libsodium-dev libgmp-dev screen libfmt-dev libdb-dev libdb5.3++-dev"
 else
    pkg_cli_build=""
 fi
