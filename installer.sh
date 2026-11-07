@@ -295,6 +295,7 @@ fi
 if [[ "${pkg_vnc}" != "" ]] && [[ "${pkg_mate_desktop}" != "" ]]; then
    tool_interactivity "vnc-mate-desktop-y" "vnc-mate-desktop-n" "Would you like to set Tiger VNC '${USER}' session to use Mate Desktop?"
    if [[ "${var_q}" == "y" ]]; then
+      mkdir -p ~/.vnc
       mv ~/.vnc/xstartup ~/.vnc/xstartup_`date +'%Y_%m_%d_%H%M%S'`
       echo "#!/bin/sh
 
@@ -603,6 +604,7 @@ if [[ "${var_q}" == "y" ]]; then
    tool_setup_dexbot_profile "BLOCK" "BTX" ./src/cfg.cc.blocknet.sh ./src/cfg.cc.blocknet.sh ./src/cfg.cc.bitcore.sh ./src/cfg.dexbot.alfa.sh ./src/cfg.strategy.block.btx.sh strategy1 unique_block_addr unique_btx_addr
    
    tool_setup_dexbot_profile "BLOCK" "SCC" ./src/cfg.cc.blocknet.sh ./src/cfg.cc.blocknet.sh ./src/cfg.cc.stakecubecoin.sh ./src/cfg.dexbot.alfa.sh ./src/cfg.strategy.block.scc.sh strategy1 unique_block_addr unique_scc_addr
+   
    
    #BTC
    tool_setup_dexbot_profile "BTC" "LTC" ./src/cfg.cc.blocknet.sh ./src/cfg.cc.bitcoin.sh ./src/cfg.cc.litecoin.sh ./src/cfg.dexbot.alfa.sh ./src/cfg.strategy.btc.ltc.sh strategy1 bitcoin01 litecoin02
