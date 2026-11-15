@@ -159,7 +159,7 @@ cd ~/dexsetup/dexsetup && ./setup.cc.dexbot.profile.sh ./src/cfg.cc.blocknet.sh 
 ```
 cd ~/dexsetup/dexbot/git.src/ && ls -la | grep strategy | grep .py
 ```
-  * Every generated strategy is easy readable well documented configuration based on [`DEXBOT template`](https://github.com/nnmfnwl/dexbot/blob/merge.2025.03.26/howto/examples/bot_v2_template.py) generated as mix with specific strategy trading pair configuration [`BLOCK/LTC`](https://github.com/nnmfnwl/dexsetup/blob/merge.2025.02.06/src/cfg.strategy.block.ltc.sh) , [`BTC/LTC`](https://github.com/nnmfnwl/dexsetup/blob/merge.2025.02.06/src/cfg.strategy.btc.ltc.sh) ...
+  * Every generated strategy is easy readable well documented configuration based on [`DEXBOT template`](https://github.com/nnmfnwl/dexbot/blob/main/howto/examples/bot_v2_template.py) generated as mix with specific strategy trading pair configuration [`BLOCK/LTC`](https://github.com/nnmfnwl/dexsetup/blob/main/src/cfg.strategy.block.ltc.sh) , [`BTC/LTC`](https://github.com/nnmfnwl/dexsetup/blob/main/src/cfg.strategy.btc.ltc.sh) ...
   * Final strategy tuning is easy but most effective way would be to write own `strategy trading pair configuration` for dexsetup which could be easy shared used again and again.
 
 #### 5.3.1. Strategy Start, Strategy Stop and Orders Cleaning
@@ -199,7 +199,7 @@ cd ~/dexsetup/dexbot/git.src/ && ls -la | grep strategy | grep .py
 ```
 
 ### 6. Used components
-  * List of all used components by dexsetup here [`dexsetup readme page`](https://github.com/nnmfnwl/dexsetup/tree/merge.2025.02.06?tab=readme-ov-file#list-of-used-components-by-dexsetup)
+  * List of all used components by dexsetup here [`dexsetup readme page`](https://github.com/nnmfnwl/dexsetup/tree/main?tab=readme-ov-file#list-of-used-components-by-dexsetup)
   
 ### 7. Additional resources
 ##### Automatization scripts examples
@@ -222,7 +222,7 @@ cd ~/dexsetup/dexbot/git.src/ && ls -la | grep strategy | grep .py
   * Email fingerprint - `f287ec46e5f0875832abb68ff54db2a4d0fe93b35ccc0cbe692f2ee6f545603d41db4e4d230fa8d2c8ffa2f39531d1da5421bfeab542c1098a6c7e26a6fec64c` - verify as `echo "<email>" | sha512sum`
 
 ### 9. Donations
-  * Donations for [DEXBOT](https://github.com/nnmfnwl/dexbot/tree/merge.2025.03.26), [DEXSETUP](https://github.com/nnmfnwl/dexsetup/tree/merge.2025.02.06), [DEXINSTALLER](https://github.com/nnmfnwl/dexinstaller) and [DEXSETUP.VIDEOS](https://github.com/nnmfnwl/dexsetup.videos) continuous development, testing and liquidity providing:
+  * Donations for [DEXBOT](https://github.com/nnmfnwl/dexbot/tree/main), [DEXSETUP](https://github.com/nnmfnwl/dexsetup/tree/main), [DEXINSTALLER](https://github.com/nnmfnwl/dexinstaller) and [DEXSETUP.VIDEOS](https://github.com/nnmfnwl/dexsetup.videos) continuous development, testing and liquidity providing:
   * For ability of this project to continue it helps even a penny support. Please use below addresses or contact section to request other address.
   * BTC LN: ****
   * BTC: ****
