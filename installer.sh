@@ -397,21 +397,24 @@ function tool_setup_wallet() {  #crypto_name  #crypto_ticker  #cfg_script_path  
    fi
 }
 
-tool_setup_wallet "Blocknet" "BLOCK" "./src/cfg.cc.blocknet.sh" "build"
-tool_setup_wallet "Litecoin" "LTC" "./src/cfg.cc.litecoin.sh" "build"
-tool_setup_wallet "Bitcoin" "BTC" "./src/cfg.cc.bitcoin.sh" "build"
-tool_setup_wallet "Dogecoin" "DOGE" "./src/cfg.cc.dogecoin.sh" "build"
-tool_setup_wallet "Dash" "DASH" "./src/cfg.cc.dash.sh" "build"
-tool_setup_wallet "PIVX" "PIVX" "./src/cfg.cc.pivx.sh" "build"
-tool_setup_wallet "Verge" "XVG" "./src/cfg.cc.verge.sh" "build"
-tool_setup_wallet "Bitcoincash unlimited" "BCH" "./src/cfg.cc.bch.unlimited.sh" "build"
-tool_setup_wallet "Bitcoincash node" "BCH" "./src/cfg.cc.bch.node.sh" "download"
-#~ tool_setup_wallet "Lbry Credits LevelDB" "LBC" "./src/cfg.cc.lbrycrd.leveldb.sh" "build"
-#~ tool_setup_wallet "Lbry Credits SQLITE" "LBC" "./src/cfg.cc.lbrycrd.sqlite.sh" "build"
-tool_setup_wallet "Pocketcoin(Bastyon.com)" "PKOIN" "./src/cfg.cc.pocketcoin.sh" "build"
-tool_setup_wallet "Particl" "PART" "./src/cfg.cc.particl.sh" "build"
-tool_setup_wallet "Bitcore" "BTX" "./src/cfg.cc.bitcore.sh" "build"
-tool_setup_wallet "Bitcore" "SCC" "./src/cfg.cc.stakecubecoin.sh" "build"
+tool_interactivity "wallet-install-y" "wallet-install-n" "Would you like to install or update core wallets?"
+if [[ "${var_q}" == "y" ]]; then
+   tool_setup_wallet "Blocknet" "BLOCK" "./src/cfg.cc.blocknet.sh" "build"
+   tool_setup_wallet "Litecoin" "LTC" "./src/cfg.cc.litecoin.sh" "build"
+   tool_setup_wallet "Bitcoin" "BTC" "./src/cfg.cc.bitcoin.sh" "build"
+   tool_setup_wallet "Dogecoin" "DOGE" "./src/cfg.cc.dogecoin.sh" "build"
+   tool_setup_wallet "Dash" "DASH" "./src/cfg.cc.dash.sh" "build"
+   tool_setup_wallet "PIVX" "PIVX" "./src/cfg.cc.pivx.sh" "build"
+   tool_setup_wallet "Verge" "XVG" "./src/cfg.cc.verge.sh" "build"
+   tool_setup_wallet "Bitcoincash unlimited" "BCH" "./src/cfg.cc.bch.unlimited.sh" "build"
+   tool_setup_wallet "Bitcoincash node" "BCH" "./src/cfg.cc.bch.node.sh" "download"
+   #~ tool_setup_wallet "Lbry Credits LevelDB" "LBC" "./src/cfg.cc.lbrycrd.leveldb.sh" "build"
+   #~ tool_setup_wallet "Lbry Credits SQLITE" "LBC" "./src/cfg.cc.lbrycrd.sqlite.sh" "build"
+   tool_setup_wallet "Pocketcoin(Bastyon.com)" "PKOIN" "./src/cfg.cc.pocketcoin.sh" "build"
+   tool_setup_wallet "Particl" "PART" "./src/cfg.cc.particl.sh" "build"
+   tool_setup_wallet "Bitcore" "BTX" "./src/cfg.cc.bitcore.sh" "build"
+   tool_setup_wallet "Bitcore" "SCC" "./src/cfg.cc.stakecubecoin.sh" "build"
+fi 
 
 echo "Wallets profiling setup"
 
