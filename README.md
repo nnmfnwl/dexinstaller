@@ -52,9 +52,10 @@ remmina -c vnc://127.0.0.1:5923
 ```
 
 ### 3. Directory structure
+  * it is recommended to understand used directory structure by browsing home directory `~/dexsetup` and standard chain directories `~/.coinname`... or use following commands:
   * All downloaded, generated files, and management scripts are stored at `~/dexsetup`
 ```
-tree -d -L 4 ~/dexsetup/ | less
+tree -d -L 2 ~/dexsetup/ | less
 ```
   * Blockchains are using default chain data directories like `~/.litecoin`, `~/.blocknet`, `~/.bitcoin` etc...
 ```
@@ -66,7 +67,7 @@ less ~/.proxychains/proxychains.conf
 ```
 
 ### 4. Start, Attach, Navigate and Detach from installed dexsetup environment by terminal
-  * To **start** `main CLI start script` which opens management only by console interface:
+  * To **start** `main CLI start script` which opens management by console interface only:
 ```
 cd ~/dexsetup/dexsetup/ && ./start.screen.instance_default.cli.sh
 ```
@@ -115,17 +116,38 @@ screen -x
 ```
 ./unlock.full
 ```
+  * If wallet is not created yet, then could be used standard command, please remember, that dexinstaller predefined wallet names by profiles for example `wallet_block_dex`, so using another name would not load it automatically
+```
+./cli createwallet "wallet name"
+```
 
 #### 5.2.1. Mandatory finalization and tuning BLOCK/LTC strategy 1
-  * After successful **strategy** installation, re-installation or update, it **must be finalized manually by text editor to be able to be used**, because it must be always specified trading address per bot strategy.
-  * To finalize by installer generated `BLOCK/LTC` default trading `strategy1`, it must edit two files:
+  * Every **strategy must be finalized manually by text editor to be able to be used**, because to specify trading addresses per bot strategy and also final tuning.
+  * To finalize for example `BLOCK/LTC` default trading `strategy1`:
+  * 1. Make copy of existing trading template by adding `add` filename suffix
 ```
-editor=geany; ${editor} ~/dexsetup/dexbot/git.src/strategy_BLOCK_LTC_strategy1.py & ${editor} ~/dexsetup/dexbot/git.src/strategy_LTC_BLOCK_strategy1.py
+cp ~/dexsetup/dexsetup/src/cfg.strategy.block.ltc.sh ~/dexsetup/dexsetup/src/cfg.strategy.block.ltc.add.sh
 ```
-  * To finalize and make strategy usable, `blocknet01` and `litecoin01` string must be replaced with valid wallet addresses.
+  * 2. open strategy in editor and keep just values that you need to change and edit them
 ```
-    "--makeraddress blocknet01"
-    "--takeraddress litecoin01"
+editor=geany; ${editor} ~/dexsetup/dexsetup/src/cfg.strategy.block.ltc.add.sh
+```
+  * 3. To finalize and make strategy usable, at least `{cc_address_maker}` and `{cc_address_taker}` string must be replaced with valid wallet addresses.
+```
+cc_address_maker_default="{cc_address_maker}"
+cc_address_taker_default="{cc_address_taker}"
+```
+  * 4. Run strategy automatic regeneration for specific trading pair again including related dexbot update
+```
+COIN1=BLOCK
+COIN2=LTC
+cd ~/dexsetup/ && bash installer.sh DEFAULT-N c-y dexsetup-update-y dexbot-strategies-y ${COIN1}-${COIN2}-setup-y ${COIN1}-${COIN2}-update-y
+```
+  * 5. Run strategy automatic regeneration for specific trading pair again not including dexbot update
+  * This is more complicated for advanced users only.
+```
+cd ~/dexsetup/dexsetup && ./setup.cc.dexbot.profile.sh ./src/cfg.cc.blocknet.sh ./src/cfg.cc.blocknet.sh ./src/cfg.cc.litecoin.sh  ./src/cfg.dexbot.alfa.sh  ./src/cfg.strategy.block.ltc.sh strategy1
+
 ```
 
 #### 5.2.2. Mandatory finalization and tuning BLOCK/LTC strategy 1 - Additional resources
@@ -163,11 +185,11 @@ cd ~/dexsetup/dexbot/git.src/ && ls -la | grep strategy | grep .py
 ```
   * **Start** `DEXBOT BLOCK LTC trading strategy1` component `after manually adding or removing funds` from specified address by:
 ```
-./run.firejail.BLOCK.LTC.strategy1.sh  --reset
+./run.firejail.BLOCK.LTC.strategy1.sh  --action reset
 ```
   * **Start** `DEXBOT LTC BLOCK trading strategy1` component `after manually adding or removing funds` from specified address by:
 ```
-./run.firejail.LTC.BLOCK.strategy1.sh  --reset
+./run.firejail.LTC.BLOCK.strategy1.sh  --action reset
 ```
 
 #### 5.3.2. Strategy Start, Strategy Stop and Orders Cleaning - Additional resources
